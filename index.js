@@ -23,9 +23,10 @@ app.get("/api/user", (req, res) => {
 });
 
 app.get("/api/moi/:user", (req, res) => {
+  let { user } = req.params;
   res.json({
     id: "T",
-    user: req.params[user],
+    user: user,
   });
 });
 
