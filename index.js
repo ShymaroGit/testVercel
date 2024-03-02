@@ -22,6 +22,13 @@ app.get("/api/user", (req, res) => {
   });
 });
 
+app.get("/api/moi/:user", (req, res) => {
+  res.json({
+    id: "T",
+    ...req,
+  });
+});
+
 if (process.env.API_PORT) {
   app.listen(process.env.API_PORT);
 }
