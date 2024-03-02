@@ -15,6 +15,12 @@ app.get("/api/date", (req, res) => {
     date: new Date().toLocaleDateString(),
   });
 });
+app.get("/api/user", (req, res) => {
+  res.json({
+    id: "owlAlone",
+    date: new Date().toLocaleDateString(),
+  });
+});
 
 if (process.env.API_PORT) {
   app.listen(process.env.API_PORT);
