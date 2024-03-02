@@ -17,7 +17,7 @@ app.get("/api/date", (req, res) => {
 });
 app.get("/api/user", (req, res) => {
   res.json({
-    id: "owlAlone",
+    username: "owlAlone",
     date: new Date().toLocaleDateString(),
   });
 });
