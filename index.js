@@ -5,7 +5,7 @@ const cors = require("cors");
 
 dotenv.config();
 app.use(cors());
-
+require("./mongoDB")(app);
 app.get("/api/test", (req, res) => {
   res.json("hello word_1");
 });
@@ -30,8 +30,6 @@ app.get("/api/moi/:user", (req, res) => {
     user: user,
   });
 });
-
-require("./mongoDB")(app);
 
 if (process.env.API_PORT) {
   app.listen(process.env.API_PORT);
