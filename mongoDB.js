@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+const { MongoClient, ServerApiVersion } = require("mongodb");
+
 /*const uri =
   "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";*/
 const uri =
   "mongodb+srv://vercel-admin-user:gS41X5Q39zNSEftf@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";
+
 const InfoShema = new Schema({
   name: String,
 });
+
+const client = new MongoClient(uri);
 
 const NotesList = model("NotesList", InfoShema);
 
@@ -27,15 +32,16 @@ async function run() {
 
 const getData = async (req, res) => {
   try {
-    await mongoose.connect(uri);
+    /* await mongoose.connect(uri);
     const t = new NotesList({ name: "Marino" });
-    await t.save();
-
-    /*let data = await mongoose /*.db("Notes")
-      .collection("NotesList")
+    await t.save();*/
+    await client.connect();
+    let data = await client
+      .db("Notes")
+      .collection("noteslists")
       .find()
-      .toArray();*/
-    res.json(t);
+      .toArray();
+    res.json(data);
   } finally {
     await mongoose.disconnect();
   }
