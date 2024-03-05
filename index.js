@@ -5,7 +5,7 @@ const cors = require("cors");
 
 dotenv.config();
 app.use(cors());
-//require("./mongoDB")(app);
+require("./mongoDB")(app);
 app.get("/api/test", (req, res) => {
   res.json("hello word_1");
 });
