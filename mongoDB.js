@@ -2,16 +2,11 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-/*const uri =
-  "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";*/
-const uri =
-  "mongodb+srv://vercel-admin-user:gS41X5Q39zNSEftf@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";
-
 const InfoShema = new Schema({
   name: String,
 });
 
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.MONGODB_URI);
 
 const NotesList = model("NotesList", InfoShema);
 
