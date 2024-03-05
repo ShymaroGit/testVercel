@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+/*const uri =
+  "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";*/
 const uri =
-  "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";
-
+  "mongodb+srv://vercel-admin-user:gS41X5Q39zNSEftf@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";
 const InfoShema = new Schema({
   name: String,
 });
