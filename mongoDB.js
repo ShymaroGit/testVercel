@@ -1,40 +1,42 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 const uri =
-  "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/?retryWrites=true&w=majority&appName=ClusterDevTest";
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
+  "mongodb+srv://Shymaro:shiori91011@clusterdevtest.bzpowgd.mongodb.net/Notes?retryWrites=true&w=majority&appName=ClusterDevTest";
+
+const InfoShema = new Schema({
+  name: String,
 });
+
+const NotesList = model("NotesList", InfoShema);
 
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    await mongoose.connect(uri);
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    await mongoose.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    await mongoose.disconnect();
   }
 }
 
 const getData = async (req, res) => {
   try {
-    await client.connect();
-    let data = await client
-      .db("Notes")
+    await mongoose.connect(uri);
+    const t = new NotesList({ name: "Marino" });
+    await t.save();
+
+    /*let data = await mongoose /*.db("Notes")
       .collection("NotesList")
       .find()
-      .toArray();
-    res.json(data);
+      .toArray();*/
+    res.json(t);
   } finally {
-    await client.close();
+    await mongoose.disconnect();
   }
 };
 
