@@ -2,10 +2,15 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 dotenv.config();
 app.use(cors());
+app.use(bodyParser.json());
+
 require("./mongoDB")(app);
+require("./route/user.route")(app);
+
 app.get("/api/test", (req, res) => {
   res.json("hello word_1");
 });
