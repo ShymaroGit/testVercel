@@ -15,7 +15,7 @@ const addUser = async (req, res) => {
     const { username, password } = req.body;
 
     let newUser = await User.create(username, password);
-    res.status(newUser.code).json(newUser.status);
+    res.status(newUser.code).json(newUser);
   } catch (error) {
     console.log(error);
     res.status(400).json(error.toString());
