@@ -23,15 +23,12 @@ const UserSchema = new Schema({
 const UserModel = model("User", UserSchema);
 
 User.create = async (username, password) => {
-  const created = new Date();
-  username = username.trim();
-
+  if (!(username.length > 0 && password.length > 0)) {
+    return { code: 400, status: `incomplete` };
+  }
   const hashedPassowrd = await bcrypt.hash(password, 10);
   let result = "";
 
-  if (!(username.trim() && password.trim())) {
-    return { code: 400, status: `incomplete` };
-  }
   try {
     await mongoose.connect(process.env.MONGODB_URI);
 
@@ -41,12 +38,12 @@ User.create = async (username, password) => {
     });
     await newUser.save();
 
-    result = { code: 200, status: `Création du compte "${username}" réussis` };
+    result = { code: 201, status: `Création du compte "${username}" réussis` };
   } catch (error) {
     result =
       error.code == 11000
         ? { code: 409, status: `Compte "${username}" existe déjà` }
-        : error.toString();
+        : { code: 500, status: error.toString() };
   } finally {
     mongoose.disconnect();
     return result;
@@ -58,12 +55,40 @@ User.getAll = async () => {
   return await UserModel.find({}, "username createdDate loggedIn");
 };
 
-User.getByUsername = async (username) => {
-  await mongoose.connect(uri);
-  return await UserModel.findOne({ username: username }, "username loggedIn");
+User.getByUsernameFull = async (username) => {
+  let result = { code: 404, status: `User "${username}" not found` };
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    let user = await UserModel.findOne(
+      { username: username },
+      "username password loggedIn"
+    );
+    if (user != null)
+      result = { code: 200, status: `User "${username}" found`, user: user };
+  } catch (error) {
+    result =
+      error.code == 11000
+        ? { code: 409, status: `Compte "${username}" euh...` }
+        : { code: 500, status: error.toString() };
+  } finally {
+    mongoose.disconnect();
+    return result;
+  }
+};
+
+User.getByUsernameSafe = async (username) => {
+  let user = await User.getByUsernameFull(username);
+
+  if (user.code == 200) {
+    let info = Object.assign({}, user.user);
+    delete info._doc.password;
+  }
+
+  return user;
 };
 
 User.updatePassword = async (username, newPassord) => {
   return {};
 };
+
 module.exports = User;
